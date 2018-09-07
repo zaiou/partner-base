@@ -1,0 +1,21 @@
+/.project
+/.settings/*
+*.iml
+.idea/
+*/target/
+.classpath
+*/logs/
+.DS_Store
+*/build
+*/lib
+*/tables
+
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+out
+gen
+*.log
+*.classes
