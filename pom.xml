@@ -11,6 +11,7 @@
     <modules>
         <module>partner-web</module>
         <module>partner-common</module>
+        <module>partner-netty</module>
     </modules>
 
     <properties>
