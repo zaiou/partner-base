@@ -188,16 +188,16 @@ public class RedisConfiguration extends CachingConfigurerSupport {
         };
     }
 
-    @Bean
-    public RedissonClient redissonClient() {
-        Config config = new Config();
-        config.useSingleServer().setAddress(String.format("redis://%s:%s", host, port)).setDatabase(database)
-                .setConnectionPoolSize(maxActive).setConnectionMinimumIdleSize(minIdle).setTimeout(timeout)
-                .setKeepAlive(true).setConnectTimeout(timeout * 10000)
-                .setPassword(StringUtils.isNotBlank(password) ? password : null).setTcpNoDelay(true);
-        log.info("====------------redission设置----------======");
-        return Redisson.create(config);
-    }
+//    @Bean
+//    public RedissonClient redissonClient() {
+//        Config config = new Config();
+//        config.useSingleServer().setAddress(String.format("redis://%s:%s", host, port)).setDatabase(database)
+//                .setConnectionPoolSize(maxActive).setConnectionMinimumIdleSize(minIdle).setTimeout(timeout)
+//                .setKeepAlive(true).setConnectTimeout(timeout * 10000)
+//                .setPassword(StringUtils.isNotBlank(password) ? password : null).setTcpNoDelay(true);
+//        log.info("====------------redission设置----------======");
+//        return Redisson.create(config);
+//    }
 
 
 }

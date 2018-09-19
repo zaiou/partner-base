@@ -15,6 +15,16 @@ public class RedisKey {
     private static final String DEFAULT_PADDING = "*";
 
     /**
+     * 获取错误码 key
+     * @param system
+     * @param code
+     * @return
+     */
+    public static String getResultCode(String system, String code) {
+        return MessageFormat.format("credit:common:resultcode:{0}:{1}", system, code);
+    }
+
+    /**
      * 测试redis的key
      * @param userCode
      * @return
