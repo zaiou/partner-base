@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zaiou.web.mybatis.mapper.SysUserMapper">
-
+    <!--添加用户-->
+    <insert id="addUser" parameterType="com.zaiou.common.mybatis.po.SysUser" keyProperty="id">
+  	  insert into sys_user(
+        USER_CODE,USER_NAME,USER_PASSWORD,ID_CARD,SALT,STATUS,MOBILE,CREATE_USER,CREATE_TIME)
+      values(
+        #{userCode},#{userName},#{userPassword},#{idCard},#{salt},#{status},#{mobile},#{createUser},#{createTime})
+    </insert>
 </mapper>

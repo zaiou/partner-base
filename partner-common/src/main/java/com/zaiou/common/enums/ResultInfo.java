@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 @AllArgsConstructor
 public enum  ResultInfo {
     SUCCESS("00", "0000", "操作成功"),
+    NOT_NULL("00", "9001", "{0}参数不能为空"),
 
     /**登录权限错误码**/
     WEB_1000	("01","1000", "登录超时,请重新登录")
