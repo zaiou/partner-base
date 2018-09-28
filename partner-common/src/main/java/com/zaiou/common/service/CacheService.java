@@ -18,7 +18,6 @@ public class CacheService {
 
     @Autowired
     private JedisService jedisService;
-
     @Autowired
     private DaoProxyService daoProxyService;
 

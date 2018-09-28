@@ -1,6 +1,8 @@
 package com.zaiou.web.vo.system;
 
 import com.zaiou.common.annotation.IdCardValidate;
+import com.zaiou.common.vo.WebRequest;
+import com.zaiou.web.annotation.Log;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,16 +19,18 @@ import org.hibernate.validator.constraints.NotBlank;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class SysUserVo extends WebVo{
+public class SysUserReq extends WebRequest {
     private static final long serialVersionUID = 6828388274867366306L;
 
     @NotBlank(message = "0001,主键")
     private String id;
 
+    @Log(fileName="登录账号")
     @NotBlank(message = "0001,登录账号")
     @Length(max = 40, message = "0004,登录账号,40")
     private String userCode;
 
+    @Log(fileName="用户名")
     @NotBlank(message = "0001,用户名")
     @Length(max = 33, message = "0004,用户名,33")
     private String userName;

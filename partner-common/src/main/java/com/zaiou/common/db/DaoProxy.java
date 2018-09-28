@@ -25,9 +25,10 @@ public class DaoProxy {
 
     private BaseDao dao;
 
-    public DaoProxy(final BaseDao dao){
+    public void setDao(BaseDao dao) {
         this.dao = dao;
     }
+
 
     /**
      *  根据PO对象查询单条数据，并返回PO对象

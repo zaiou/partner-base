@@ -3,7 +3,7 @@ package com.test;
 import com.zaiou.web.WebApplication;
 import com.zaiou.web.common.bean.CurrentUser;
 import com.zaiou.web.service.system.UserService;
-import com.zaiou.web.vo.system.SysUserVo;
+import com.zaiou.web.vo.system.SysUserReq;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,16 +29,16 @@ public class WebSysTemTest {
      */
     @Test
     public void addUser(){
-        SysUserVo sysUserVo = new SysUserVo();
-        sysUserVo.setUserCode("admin");
-        sysUserVo.setUserName("管理员");
-        sysUserVo.setUserPassword("123456");
-        sysUserVo.setIdCard("123456789");
-        sysUserVo.setMobile("18756921322");
-        sysUserVo.setStatus("1");
+        SysUserReq sysUserReq = new SysUserReq();
+        sysUserReq.setUserCode("admin");
+        sysUserReq.setUserName("管理员");
+        sysUserReq.setUserPassword("123456");
+        sysUserReq.setIdCard("123456789");
+        sysUserReq.setMobile("18756921322");
+        sysUserReq.setStatus("1");
 
         CurrentUser currentUser = new CurrentUser();
         currentUser.setUserCode("654321");
-        userService.addUser(sysUserVo, currentUser);
+        userService.addUser(sysUserReq, currentUser);
     }
 }

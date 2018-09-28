@@ -120,7 +120,13 @@
                 <!--enableSelectByPrimaryKey="false"-->
                 <!--enableUpdateByPrimaryKey="false">-->
             <!--</table>-->
-            <table tableName="SYS_RESULT_INFO"
+            <!--<table tableName="SYS_RESULT_INFO"-->
+                   <!--enableInsert="false"-->
+                   <!--enableDeleteByPrimaryKey="false"-->
+                   <!--enableSelectByPrimaryKey="false"-->
+                   <!--enableUpdateByPrimaryKey="false">-->
+            <!--</table>-->
+            <table tableName="SYS_OPERATE_LOG"
                    enableInsert="false"
                    enableDeleteByPrimaryKey="false"
                    enableSelectByPrimaryKey="false"

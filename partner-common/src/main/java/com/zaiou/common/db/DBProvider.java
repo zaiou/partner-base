@@ -91,7 +91,7 @@ public class DBProvider {
             if (columns.length() > 0) {
                 columns.append(",");
             }
-            columns.append(allFieldMap.get(key)).append(" as ").append(key);
+            columns.append(allFieldMap.get(key)).append(" as ").append(key.toUpperCase());
         }
 
         // 根据PO属性不为空拼接过滤条件

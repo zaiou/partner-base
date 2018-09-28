@@ -21,7 +21,11 @@ public class RedisKey {
      * @return
      */
     public static String getResultCode(String system, String code) {
-        return MessageFormat.format("credit:common:resultcode:{0}:{1}", system, code);
+        return MessageFormat.format("partner:common:resultcode:{0}:{1}", system, code);
+    }
+
+    public static String getTokenUserinfo(String token) {
+        return MessageFormat.format("partner:web:tokenuserinfo:{0}", StringUtils.toString(token, DEFAULT_PADDING));
     }
 
     /**
@@ -45,7 +49,7 @@ public class RedisKey {
     }
 
     /**
-     * 队列设值
+     * 测试队列设值
      * @param userCode
      * @return
      */
@@ -55,7 +59,7 @@ public class RedisKey {
     }
 
     /**
-     * 统计的key
+     * 测试统计的key
      * @param userCode
      * @return
      */
