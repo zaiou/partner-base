@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zaiou.web.mybatis.mapper.SysOperateLogMapper" >
+  <resultMap id="BaseResultMap" type="com.zaiou.common.mybatis.po.SysOperateLog" >
+    <constructor >
+      <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="TYPE" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="FUNC" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="TEXT" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="OPERATE_USER" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="OPERATE_NAME" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="OPERATE_TIME" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="IP" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, TYPE, FUNC, TEXT, OPERATE_USER, OPERATE_NAME, OPERATE_TIME, IP
+    from sys_operate_log
+  </select>
+</mapper>

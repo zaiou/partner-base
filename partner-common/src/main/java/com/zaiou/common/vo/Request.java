@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @auther: LB 2018/9/20 20:24
  * @modify: LB 2018/9/20 20:24
  */
-public class BaseVo implements Serializable {
+public class Request implements Serializable {
     private static final long serialVersionUID = -8175064641670758182L;
 
     private String threadName = Thread.currentThread().getName();// 线程号

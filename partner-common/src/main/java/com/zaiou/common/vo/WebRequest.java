@@ -1,6 +1,5 @@
-package com.zaiou.web.vo.system;
+package com.zaiou.common.vo;
 
-import com.zaiou.common.vo.BaseVo;
 import lombok.Data;
 
 /**
@@ -9,7 +8,7 @@ import lombok.Data;
  * @modify: LB 2018/9/20 20:50
  */
 @Data
-public class WebVo extends BaseVo {
+public class WebRequest extends Request {
     private static final long serialVersionUID = 2778556716260538765L;
 
     private int pageNumber = 1;

@@ -6,9 +6,9 @@ import com.zaiou.common.exception.BussinessException;
 import com.zaiou.web.annotation.CurrentUserSeession;
 import com.zaiou.web.common.bean.CurrentUser;
 import com.zaiou.web.common.bean.RespBody;
-import com.zaiou.web.controller.common.BaseController;
+import com.zaiou.web.common.utils.R;
 import com.zaiou.web.service.system.UserService;
-import com.zaiou.web.validate.group.UpdateValidate;
+import com.zaiou.web.validate.group.SaveValidate;
 import com.zaiou.web.vo.system.SysUserReq;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.ArrayUtils;
@@ -27,33 +27,23 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @Slf4j
 @RequestMapping("/user")
-public class UserController extends BaseController {
+public class UserController {
 
     @Autowired
     private UserService userService;
 
     @RequestMapping(value = "/addUser", method = { RequestMethod.POST })
     public @ResponseBody
-    RespBody addUser(@CurrentUserSeession CurrentUser user,
-                     @RequestBody @Validated(value = { UpdateValidate.class }) SysUserReq req, BindingResult result,
-                     HttpServletRequest httpServletRequest) {
+    RespBody addUser(@CurrentUserSeession CurrentUser user,HttpServletRequest httpServletRequest,
+                     @RequestBody @Validated(value = { SaveValidate.class }) SysUserReq req,
+                     BindingResult result) {
         try {
             log.info("========用户添加开始========");
-            checkBean(result);
 //            req.setRoleName(SysRoleEnum.getMsgByCode(req.getRoleCode()));
             userService.addUser(req, user);
-            return assemble(ResultInfo.SUCCESS);
+            return R.info(ResultInfo.SUCCESS);
         } finally {
             log.info("========用户添加结束========");
-        }
-    }
-
-    protected void checkBean(BindingResult result) {
-        if (result.hasErrors()) {
-            String[] errorMsgs = result.getFieldError().getDefaultMessage().split(",");
-            ResultInfo resultInfo = ResultInfo.getResultCode("01", errorMsgs[0]);
-            assert resultInfo != null;
-            throw new BussinessException(resultInfo, ArrayUtils.remove(errorMsgs, 0));
         }
     }
 }
