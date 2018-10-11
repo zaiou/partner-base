@@ -10,13 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class SessionConstant {
 
-    // SessionID
-    public static final String SESSION_ID = "sessionId";
-
     // 令牌ID
     public static final String TOKEN_ID = "token";
 
-    //currentID
+    //currentID  根据currentSessionId获取用户信息
     public static final String CURRENT_SESSION_ID = "currentSessionId";
 
 }

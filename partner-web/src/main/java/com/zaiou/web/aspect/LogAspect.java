@@ -150,6 +150,7 @@ public class LogAspect {
             String method = request.getMethod();
             String uri = request.getRequestURI();
             Object vo = null;
+            //获取拦截的vo类
             if ("POST".equalsIgnoreCase(method)) {
                 Object[] obj = pjp.getArgs();
                 for (Object object : obj) {
@@ -167,12 +168,13 @@ public class LogAspect {
                 result.setMessage(bs.getRespMsg());
             }
 
+            //当前接口的请求uri与操作日志枚举定义的相同，则拦截，在日志表形成记录
             LogOperateEnum operateEnum = LogOperateEnum.getEnum(uri);
 
             if (StringUtils.isNotEmpty(operateEnum)) {
                 JSONObject jsonRequest = LogService.analysis(vo);
                 String code = String.valueOf(result.getCode());
-                if ((LogOperateEnum.user_login.equals(operateEnum) && ResultInfo.WEB_1005.getCode().equals(code))) {
+                if ((LogOperateEnum.user_login.equals(operateEnum) && ResultInfo.WEB_1001.getCode().equals(code))) {
                     operateEnum = LogOperateEnum.user_login_err;
                     addLog(request, null, operateEnum, jsonRequest, null);
                 }

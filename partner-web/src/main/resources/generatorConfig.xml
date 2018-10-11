@@ -126,7 +126,13 @@
                    <!--enableSelectByPrimaryKey="false"-->
                    <!--enableUpdateByPrimaryKey="false">-->
             <!--</table>-->
-            <table tableName="SYS_OPERATE_LOG"
+            <!--<table tableName="SYS_OPERATE_LOG"-->
+                   <!--enableInsert="false"-->
+                   <!--enableDeleteByPrimaryKey="false"-->
+                   <!--enableSelectByPrimaryKey="false"-->
+                   <!--enableUpdateByPrimaryKey="false">-->
+            <!--</table>-->
+            <table tableName="SYS_PARAMS"
                    enableInsert="false"
                    enableDeleteByPrimaryKey="false"
                    enableSelectByPrimaryKey="false"

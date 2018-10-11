@@ -4,6 +4,7 @@ import com.zaiou.web.WebApplication;
 import com.zaiou.web.common.bean.CurrentUser;
 import com.zaiou.web.service.system.UserService;
 import com.zaiou.web.vo.system.SysUserReq;
+import com.zaiou.web.vo.system.UserLoginReq;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,5 +41,16 @@ public class WebSysTemTest {
         CurrentUser currentUser = new CurrentUser();
         currentUser.setUserCode("654321");
         userService.addUser(sysUserReq, currentUser);
+    }
+
+    /**
+     * 用户登录
+     */
+    @Test
+    public void login(){
+        UserLoginReq userLoginReq = new UserLoginReq();
+        userLoginReq.setUserCode("admin");
+        userLoginReq.setPassword("123456");
+        userService.login(userLoginReq);
     }
 }

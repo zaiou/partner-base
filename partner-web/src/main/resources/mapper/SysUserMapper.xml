@@ -8,4 +8,9 @@
       values(
         #{userCode},#{userName},#{userPassword},#{idCard},#{salt},#{status},#{mobile},#{createUser},#{createTime})
     </insert>
+
+    <!--根据userCode查找用户信息-->
+    <select id="getSysUserByUserCode" resultType="com.zaiou.common.mybatis.po.SysUser">
+    SELECT * FROM SYS_USER where USER_CODE = #{userCode}
+  </select>
 </mapper>

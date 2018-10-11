@@ -49,7 +49,7 @@ public class SysUserReq extends WebRequest {
     @Length(max = 30, message = "0002,手机号码,30")
     private String mobile;
 
-    @NotBlank(message = "0001,用户状态", groups = { SaveValidate.class, UpdateValidate.class })
+    @NotBlank(message = "0001,用户状态")
     private String status;
 
     @NotBlank(message = "0001,角色")

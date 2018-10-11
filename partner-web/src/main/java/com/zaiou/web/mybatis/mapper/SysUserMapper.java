@@ -10,4 +10,9 @@ public interface SysUserMapper {
      * @param sysUser
      */
     public void addUser(SysUser sysUser);
+
+    /**
+     * 根据userCode查找用户信息
+     */
+    public SysUser getSysUserByUserCode(String userCode);
 }
