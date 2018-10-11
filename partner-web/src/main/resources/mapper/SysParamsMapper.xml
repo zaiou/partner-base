@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zaiou.web.mybatis.mapper.SysParamsMapper">
+  <resultMap id="BaseResultMap" type="com.zaiou.common.mybatis.po.SysParams">
+    <constructor>
+      <idArg column="ID" javaType="java.lang.Long" jdbcType="BIGINT" />
+      <arg column="CODE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="VALUE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="NAME" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="VALUE_TYPE" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="UPDATE_FLAG" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="CRAETE_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="CRAETE_USER" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="UPDATE_TIME" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="UPDATE_USER" javaType="java.lang.String" jdbcType="VARCHAR" />
+    </constructor>
+  </resultMap>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ID, CODE, VALUE, NAME, VALUE_TYPE, UPDATE_FLAG, CRAETE_TIME, CRAETE_USER, 
+    UPDATE_TIME, UPDATE_USER
+    from sys_params
+  </select>
+</mapper>

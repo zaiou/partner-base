@@ -30,8 +30,10 @@ public class BussinessException extends RuntimeException{
     }
 
     public BussinessException(ResultInfo resultInfo, Object... params) {
+        //从resultInfo中获取异常消息放到BussinessException的父类异常的message中
         super(resultInfo.getCacheMsg(params));
         this.respCode = resultInfo.getCode();
+        //获取BussinessException的父类异常的message
         this.respMsg = getMessage();
     }
 }

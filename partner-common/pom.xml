@@ -164,11 +164,11 @@
             <version>${mybatis.spring.boot.version}</version>
         </dependency>
         <!-- just for mybatis generator plugs -->
-        <!--<dependency>-->
-            <!--<groupId>org.mybatis.generator</groupId>-->
-            <!--<artifactId>mybatis-generator-core</artifactId>-->
-            <!--<version>${mybatis.generator.core.version}</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.mybatis.generator</groupId>
+            <artifactId>mybatis-generator-core</artifactId>
+            <version>${mybatis.generator.core.version}</version>
+        </dependency>
         <!--通用Mapper插件 -->
         <dependency>
             <groupId>tk.mybatis</groupId>

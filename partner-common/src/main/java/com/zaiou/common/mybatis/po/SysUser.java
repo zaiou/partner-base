@@ -27,6 +27,8 @@ public class SysUser implements Po {
 
     private Date lastLoginTime;
 
+    private Integer errorTimes;
+
     private Integer status;
 
     private String createUser;
@@ -41,7 +43,7 @@ public class SysUser implements Po {
 
     private static final long serialVersionUID = 1L;
 
-    public SysUser(Long id, String userCode, String userName, String userPassword, String salt, String birthday, String sex, String email, String phone, String mobile, String idCard, Date lastLoginTime, Integer status, String createUser, Date createTime, String updateUser, Date updateTime, String remark) {
+    public SysUser(Long id, String userCode, String userName, String userPassword, String salt, String birthday, String sex, String email, String phone, String mobile, String idCard, Date lastLoginTime,Integer errorTimes, Integer status, String createUser, Date createTime, String updateUser, Date updateTime, String remark) {
         this.id = id;
         this.userCode = userCode;
         this.userName = userName;
@@ -54,6 +56,7 @@ public class SysUser implements Po {
         this.mobile = mobile;
         this.idCard = idCard;
         this.lastLoginTime = lastLoginTime;
+        this.errorTimes=errorTimes;
         this.status = status;
         this.createUser = createUser;
         this.createTime = createTime;
@@ -160,6 +163,14 @@ public class SysUser implements Po {
 
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
+    }
+
+    public Integer getErrorTimes() {
+        return errorTimes;
+    }
+
+    public void setErrorTimes(Integer errorTimes) {
+        this.errorTimes = errorTimes;
     }
 
     public Integer getStatus() {

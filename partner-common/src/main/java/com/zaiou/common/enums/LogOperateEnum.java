@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * @Description: 日志操作枚举
+ * @Description: 日志操作枚举 -- 在此定义枚举后请求接口的uri有与此匹配即可拦截存库
  * @auther: LB 2018/9/25 15:51
  * @modify: LB 2018/9/25 15:51
  */
@@ -16,7 +16,6 @@ public enum LogOperateEnum {
 
     user_login("登录", "登录成功", "/web/user/login", false),
     user_login_err("登录", "密码错误", "", false),
-
     user_logout("退出", "退出成功", "/web/user/logout", true)
     ;
 

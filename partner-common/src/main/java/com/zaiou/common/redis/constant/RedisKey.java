@@ -24,8 +24,31 @@ public class RedisKey {
         return MessageFormat.format("partner:common:resultcode:{0}:{1}", system, code);
     }
 
+    /**
+     * 系统参数
+     * @param code
+     * @return
+     */
+    public static String getSyspara(String code) {
+        return MessageFormat.format("partner:common:syspara:{0}", StringUtils.toString(code, DEFAULT_PADDING));
+    }
+
+    /**
+     * 会话-用户信息
+     * @param token
+     * @return
+     */
     public static String getTokenUserinfo(String token) {
         return MessageFormat.format("partner:web:tokenuserinfo:{0}", StringUtils.toString(token, DEFAULT_PADDING));
+    }
+
+    /**
+     * 会话-用户token
+     * @param userCode
+     * @return
+     */
+    public static String getLoginToken(String userCode) {
+        return MessageFormat.format("partner:web:logintoken:{0}", StringUtils.toString(userCode, DEFAULT_PADDING));
     }
 
     /**
