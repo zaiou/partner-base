@@ -3,6 +3,9 @@ package com.zaiou.common.utils;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.zaiou.common.service.CoreService;
+import com.zaiou.common.vo.CustomResponse;
+import com.zaiou.common.vo.Request;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
@@ -54,6 +57,21 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     }
 
     /**
+     * 从静态变量ApplicationContext中取得Bean,
+     * 自动转型为所赋值对象的类型.com.froad.ebank.filter.service.transform.impl.ConvertXML
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getBeanByClassName(String className) {
+        try {
+            Class<?> classInstance = Class.forName(className);
+            return (T) getBean(classInstance);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 检查bean注入
      */
     private static void checkApplicationContext() {
@@ -68,6 +86,37 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
     public static void cleanApplicationContext() {
         applicationContext = null;
     }
+
+    /**
+     * 数据模型 获取反射对象
+     */
+    public static Request getReflectionObject(String jym, String reqdata) {
+        String instanceName = String.format("%s%sReq", Character.toLowerCase(jym.charAt(0)), jym.substring(1));
+        log.debug("instanceName:" + instanceName);
+        Request request = getBean(instanceName);
+        Gson gson = getBean(Gson.class);
+        Request fromJson = gson.fromJson(reqdata, request.getClass());
+        String threadName = fromJson.getThreadName();
+        if (StringUtils.isNotEmpty(threadName)) {
+            log.info("switch thread name ---> [{}]", threadName);
+            Thread.currentThread().setName(threadName);
+        }
+        fromJson.setJym(jym);
+
+        log.info("应用层数据:{}", DesensitizedUtils.toJsonString(fromJson));
+        return fromJson;
+    }
+
+    /**
+     * 数据模型 执行流程对应方法对应方法
+     */
+    public static CustomResponse invokeMethod(String jym, Request request) throws NoSuchMethodException {
+        String instanceName = String.format("%s%sProcess", Character.toLowerCase(jym.charAt(0)), jym.substring(1));
+        log.debug("invokeMethod instanceName:" + instanceName);
+        CoreService service = getBean(instanceName);
+        return service.execute(request);
+    }
+
 
     @Override
     public void destroy() throws Exception {
