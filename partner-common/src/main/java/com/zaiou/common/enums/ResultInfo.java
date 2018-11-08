@@ -28,6 +28,8 @@ public enum  ResultInfo {
     WEB_COMMON_MAX_0002			("01", "0002","{0}字段过长"),
     WEB_COMMON_FILASIZE_LIMIT_0003	("01", "0003","文件大小不可超过{0}M"),
     WEB_COMMON_IDCARD_0005	        ("01", "0005","身份证号码格式错误"),
+    WEB_COMMON_FILASIZE_LIMIT_0006 	("01", "0006","文件导出模板不存在"),
+    BOSS_COMMON_EXP_FAIL_0007	    ("01", "0007","导出文件失败"),
 
     //登录权限错误码
     WEB_1000	("01","1000", "登录超时,请重新登录"),

@@ -36,6 +36,7 @@
 |项目名称|开发环境端口|测试环境端口|UAT环境端口|url定义
 |:--|
 |partner-web|8888|8888|8888|http://127.0.0.1:{port}/web
+|partner-datamodel|8889|8889|8889|http://127.0.0.1:{port}/datamodel
 
 git代码地址: https://github.com/zaiou/partner-base.git
 
@@ -139,6 +140,15 @@ git代码地址: https://github.com/zaiou/partner-base.git
     
     ----
     
+    * datamodel模块:
+        * config 配置文件
+        * com.zaiou.datamodel.api 项目入口
+        * com.zaiou.datamodel.config 配置文件
+        * com.zaiou.datamodel.mybatis.mapper mapper类
+        * com.zaiou.datamodel.redis redis处理
+    
+    ---
+    
 ### 项目主要详细
     * common模块
         * 系统错误码(异常处理)
@@ -151,6 +161,10 @@ git代码地址: https://github.com/zaiou/partner-base.git
         说明: 1、com.zaiou.web.controller.system.UserController中添加用户登录接口 ,用户 通过输入用户账号和密码，首先通过用户账号在sys_user表中查找用户，如果用户存在通过md5加盐加密用户密码和sys_user表中的用户密码进行比较，密码相同验证通过，密码不同的话提示用户密码错误，错误六次将被锁定；在密码相同验证通过的情况下后端会生成一个用户token,根据用户的token生成一个redis的key,用户相关信息为redis的值，并配置用户登录超时时间；另外根据用户账号生成一个reids的key,token为reids的值，并配置用户登录超时时间；最后登陆成功会更新密码错误次数为0次；      2、com.zaiou.web.interceptor.AuthInterceptor中设置用户会话拦截器，classpath:authIgnore.properties属性文件配置不需要用户会话拦截接口；需要会话拦截的接口会通过前端header传过来的token获取用户会话信息的reids的key,根据key获取用户信息（用户信息不存在的话登陆超时被下线），判断为首次登陆的话需要修改用户密码；然后根据用户账号获取缓存中用户token的key,根据key获取用户token,token不存在强制下线，前端的token和reids中的token不一致，用户在别处登陆；然后更新token和用户超时时间；最后将用户信息的reids的key放到attrbute中
         * 操作日志
         说明：com.zaiou.common.enums.LogOperateEnum中定义需要添加操作日志的接口，com.zaiou.web.vo.*中请求的vo类中需要记录日志的字段添加@Log注解(eg: @Log(fileName="登录账号"));com.zaiou.web.aspect.LogAspect切面类中对控制器进行拦截，当接口操作成功且需要添加操作日志的添加成功的操作记录;当接口操作抛出异常且需要添加操作日志的时候，只有在错误码为WEB_1001，即密码错误的时候才会添加操作日志，其他操作抛出异常不加入日志
+    
+    * datamodel模块
+        * redis消息队列
+        说明：redis做消息队列的订阅发布功能；首先实现订阅功能，com.zaiou.datamodel.config.StartupListener--->com.zaiou.datamodel.redis.subscribe.SubscribeService订阅相关频道；任何实现消息处理功能，通过订阅的频道接受发布的消息，com.zaiou.datamodel.redis.subscribe.SubscribeService--->com.zaiou.datamodel.redis.listener.RequestMsgListener--->com.zaiou.datamodel.redis.handler.DispatchMessageHandler--->com.zaiou.datamodel.redis.handler.impl.MessageThreadImpl--->com.zaiou.datamodel.redis.handler.impl.MessageHandlerImpl实现发布消息的消息处理；最后发布消息，在相关接口实现
         
         
         

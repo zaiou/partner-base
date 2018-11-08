@@ -22,7 +22,10 @@
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
         <java.version>1.8</java.version>
         <partner.version>0.0.1-SNAPSHOT</partner.version>
-
+        <jxls.version>2.4.0</jxls.version>
+        <jxls-jexcel.version>1.0.6</jxls-jexcel.version>
+        <jxls-poi.version>1.0.11</jxls-poi.version>
+        <sensitive.words.version>0.4.0</sensitive.words.version>
     </properties>
 
     <dependencies>
@@ -30,6 +33,57 @@
             <groupId>com.zaiou</groupId>
             <artifactId>partner-common</artifactId>
             <version>${partner.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.itextpdf/itextpdf -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.10</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.lowagie/itext -->
+        <dependency>
+            <groupId>com.lowagie</groupId>
+            <artifactId>itext</artifactId>
+            <version>2.1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itext-asian</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.2.5.Final</version>
+        </dependency>
+        <!-- JXLS -->
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls</artifactId>
+            <version>${jxls.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls-jexcel</artifactId>
+            <version>${jxls-jexcel.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jxls</groupId>
+            <artifactId>jxls-poi</artifactId>
+            <version>${jxls-poi.version}</version>
+        </dependency>
+
+        <!-- sensitive words -->
+        <dependency>
+            <groupId>org.ahocorasick</groupId>
+            <artifactId>ahocorasick</artifactId>
+            <version>${sensitive.words.version}</version>
         </dependency>
     </dependencies>
 

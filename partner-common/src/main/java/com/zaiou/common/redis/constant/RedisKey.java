@@ -52,6 +52,22 @@ public class RedisKey {
     }
 
     /**
+     * 消息队列-数据模型正常消息
+     * @return
+     */
+    public static String getMMmodelNormal() {
+        return "partner:mq:model:normal";
+    }
+
+    /**
+     *  模型业务消息正常发布key
+     * @return
+     */
+    public static String getMsgModelNormal() {
+        return "partner:msg:model:normal";
+    }
+
+    /**
      * 测试redis的key
      * @param userCode
      * @return
