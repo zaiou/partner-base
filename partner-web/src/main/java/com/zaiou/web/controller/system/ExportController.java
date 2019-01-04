@@ -1,7 +1,7 @@
 package com.zaiou.web.controller.system;
 
 import com.zaiou.common.enums.ExportTempFileEnum;
-import com.zaiou.web.common.export.ExportUtils;
+import com.zaiou.web.common.exportFile.ExportUtils;
 import com.zaiou.web.vo.ExportResp;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @Description: 导出控制类
@@ -44,7 +43,7 @@ public class ExportController {
         params.put("data", list);
         try {
             // 导出excel
-//            exportUtils.exportExcelMultipleFile(params, ExportTempFileEnum.export_1001, response,"data");
+            exportUtils.exportExcelMultipleFile(params, ExportTempFileEnum.export_1001, response,"data");
             // 导出pdf
             exportUtils.exportExcelToPdf(params, ExportTempFileEnum.export_1001, response);
         } catch (Exception e) {

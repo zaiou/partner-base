@@ -23,6 +23,10 @@ public class ScheduleConfig implements SchedulingConfigurer {
         taskRegistrar.setScheduler(taskExecutor());
     }
 
+    /**
+     * 多线程执行定时任务
+     * @return
+     */
     @Bean(destroyMethod = "shutdown")
     public Executor taskExecutor() {
         ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(

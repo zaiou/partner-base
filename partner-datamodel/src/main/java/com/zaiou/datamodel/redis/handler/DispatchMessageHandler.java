@@ -50,6 +50,7 @@ public class DispatchMessageHandler {
     public void process() {
         while (true) {
             try {
+                // 当活动线程数达到总线程数一半，休眠3秒
                 while (maxThreadNum/2 - exe.getActiveCount() == 0) {
                     log.info("初始化线程数{}活动线程数{},等待处理，开始睡眠....", initThreadNum, exe.getActiveCount());
                     Thread.sleep(3000);
