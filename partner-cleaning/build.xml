@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="credit-anhui-cleaning" default="post-clean" basedir=".">
+    <tstamp>
+        <!-- 该参数用来将war包生成到指定日期目录 -->
+        <format property="TODAY" pattern="yyyy-MM-dd" />
+    </tstamp>
+    <property name="project.home" value="." />
+    <property name="project" value="partner-cleaning" />
+    <!-- 生成的jar包名称 -->
+    <property name="src.dir" value="src/main" />
+    <property name="version" value="0.0.1-SNAPSHOT" />
+    <property name="jar.name" value="${project}-${version}.jar" />
+
+    <property name="build.home" location="${project.home}/build/${TODAY}" />
+
+    <property name="dest" value="${project.home}/build/classes" />
+
+    <property name="lib.home" value="${project.home}/lib/compile" />
+    <path id="project.class.path">
+        <pathelement path="${project.home}" />
+        <fileset dir="${lib.home}">
+            <include name="**/*.jar" />
+        </fileset>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.home}" />
+        <delete dir="${dest}" />
+    </target>
+
+    <!-- 初始化-->
+    <target name="init" depends="clean">
+        <mkdir dir="${build.home}" />
+        <mkdir dir="${dest}" />
+
+        <property name="scala-library.jar" value="${lib.home}/scala-library.jar" />
+        <property name="spark-core.jar" value="${lib.home}/spark-core_2.10-1.6.1.jar" />
+        <property name="hadoop-core.jar" value="${lib.home}/hadoop-core-2.6.0-mr1-cdh5.13.0.jar" />
+
+        <path id="build.classpath">
+            <pathelement location="${lib.home}" />
+            <pathelement location="${scala-library.jar}" />
+            <pathelement location="${spark-core.jar}" />
+            <pathelement location="${hadoop-core.jar}" />
+        </path>
+
+        <taskdef resource="scala/tools/ant/antlib.xml">
+            <classpath>
+                <pathelement location="${lib.home}/scala-compiler.jar" />
+                <pathelement location="${lib.home}/scala-library.jar" />
+                <pathelement location="${lib.home}/scala-reflect.jar" />
+                <pathelement location="${lib.home}/spark-core_2.10-1.6.1.jar" />
+            </classpath>
+        </taskdef>
+    </target>
+    <!-- 编译java -->
+    <target name="compilecommonjava" depends="init">
+        <javac srcdir="${src.dir}/java" destdir="${dest}" includeAntRuntime="false">
+            <compilerarg line="-encoding UTF-8 " />
+            <classpath refid="project.class.path" />
+        </javac>
+    </target>
+    <!-- 编译scala -->
+    <target name="compile" depends="compilecommonjava">
+        <mkdir dir="${dest}" />
+        <scalac srcdir="${src.dir}" destdir="${dest}">
+            <compilerarg line="-encoding UTF-8 " />
+            <include name="**/*.scala" />
+            <include name="**/*.java" />
+            <include name="**/*.XML" />
+            <include name="**/*.xml" />
+            <classpath refid="project.class.path" />
+        </scalac>
+        <echo message="${src.dir}/resources" />
+    </target>
+
+    <!-- 打包-->
+    <target name="post-clean" depends="compile">
+        <jar jarfile="${build.home}/${jar.name}" basedir="${dest}">
+            <manifest>
+                <attribute name="Main-class" value="${mainclass}" />
+                <attribute name="Class-Path" value="${build.classpath}" />
+            </manifest>
+        </jar>
+        <delete dir="${dest}" />
+    </target>
+
+    <target name="post-clean-with-zip" depends="post-clean">
+        <copyfile src="${build.home}/${jar.name}" dest="${project.home}/${jar.name}" forceoverwrite="true" />
+        <delete file="${build.home}/${jar.name}" />
+        <zip basedir="${project.home}" destfile="${build.home}/${project}-${version}.zip" includes="lib/run/**.jar **.jar script/ config/" />
+    </target>
+</project>

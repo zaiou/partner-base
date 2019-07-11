@@ -219,6 +219,7 @@ public class ExportUtils {
             String filePath = exportPath + File.separator + exportTemp.getName() + fileSuffix;
             File file = new File(filePath);
             if (!file.exists()) {
+                log.info(ResultInfo.WEB_COMMON_FILASIZE_LIMIT_0006.getMsg());
                 throw new BussinessException(ResultInfo.WEB_COMMON_FILASIZE_LIMIT_0006);
             }
             log.debug(String.format("导出模板文件路径：%s\r\n", filePath));

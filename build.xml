@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build-all" name="partner-base">
+    <tstamp>
+        <!-- 该参数用来将war/jar包生成到指定日期目录 -->
+        <format property="TODAY" pattern="yyyy-MM-dd" />
+    </tstamp>
+    <property name="project.home" value="." />
+
+    <!-- 生成的jar包名称 -->
+    <property name="build.home" location="${project.home}/build/${TODAY}" />
+
+    <!-- 打包模块 打包模块 打包模块 -->
+    <!-- partner-cleaning模块 -->
+    <property name="dependency.project.dir8" value="./partner-cleaning" />
+
+    <!-- 第1步：编译之前清除临时目录，防止编译到一半失败或者异常终止导致文件残余且影响下次编译结果 -->
+    <target name="pre-clean">
+        <mkdir dir="${build.home}" />
+    </target>
+    <!-- 第2步：首次上线全量打包(含启动脚本) -->
+    <target name="build-all" depends="pre-clean">
+        <!-- 清数据清洗模块 -->
+        <antcall target="packingProjectCleaning" />
+    </target>
+
+    <!-- 打包partner-cleaning 项目  WithLinux -->
+    <target name="packingProjectCleaning" description="通过shell脚本执行其它ant命令">
+        <!-- 编译partner-cleaning项目 -->
+        <ant antfile="${dependency.project.dir8}/build-cleaning.xml" />
+        <copy includeemptydirs="false" todir="${build.home}" overwrite="true" description="复制到父级build/yyyyMMdd目录下">
+            <fileset dir="${dependency.project.dir8}/build/${TODAY}">
+                <include name="**/*.zip" />
+            </fileset>
+        </copy>
+        <delete dir="${dependency.project.dir78}/build/${TODAY}" />
+    </target>
+
+</project>

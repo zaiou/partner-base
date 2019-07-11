@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @ConditionalOnProperty(name = "task.enable", havingValue = "true", matchIfMissing = false)
 public class TestTask extends AbstractTask{
 
-    @Scheduled(cron = "${task.cron.test:*/10 * * * * ?}")
+//    @Scheduled(cron = "${task.cron.test:*/10 * * * * ?}")
     public void job(){
         super.job();
     }
