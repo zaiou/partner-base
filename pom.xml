@@ -9,10 +9,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>partner-web</module>
+<!--        <module>partner-web</module>-->
         <module>partner-common</module>
-        <module>partner-netty</module>
-        <module>partner-cleaning</module>
+<!--        <module>partner-netty</module>-->
         <module>partner-cleaning</module>
     </modules>
 
