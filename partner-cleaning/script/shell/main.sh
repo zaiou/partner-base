@@ -4,10 +4,14 @@
 project_path=$(cd `dirname $0`; pwd)
 source "${project_path%%script*}/script/util/util.sh"
 
-year=`date +%Y -d "-$yesDay days"`
-month=`date +%m -d "-$yesDay days"`
+year=`date +%Y`
+month=`date +%m`
+if $uname  =  'Darwin'; then
+day=`date -v -1d +%d`
+else
 day=`date +%d -d "-$yesDay days"`
-hour=`date +%H -d "-$yesDay days"`
+fi
+hour=`date +%H`
 
 yearSocial=`date +%Y`
 monthSocial=`date +%m`

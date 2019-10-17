@@ -24,7 +24,7 @@ object Utils {
     if ("".equals(colValue) || "null".equals(colValue) || colValue == null) {
       None
     } else {
-      Some(String.valueOf(colValue))
+      String.valueOf(colValue)
     }
   }
 
@@ -32,7 +32,7 @@ object Utils {
     if ("".equals(colValue) || "null".equals(colValue) || colValue == null) {
       None
     } else {
-      Some(java.lang.Long.parseLong(colValue))
+      java.lang.Long.parseLong(colValue)
     }
   }
 
@@ -40,7 +40,7 @@ object Utils {
     if ("".equals(colValue) || "null".equals(colValue) || colValue == null) {
       None
     } else {
-      Some(java.lang.Double.parseDouble(colValue).toInt)
+      java.lang.Double.parseDouble(colValue).toInt
     }
   }
 
@@ -48,7 +48,7 @@ object Utils {
     if ("".equals(colValue) || "null".equals(colValue) || colValue == null) {
       None
     } else {
-      Some(java.lang.Double.parseDouble(colValue))
+      java.lang.Double.parseDouble(colValue)
     }
   }
 
@@ -58,7 +58,7 @@ object Utils {
     if ("".equals(colValue) || "null".equals(colValue) || colValue == null) {
       None
     } else {
-      Some(new java.sql.Timestamp(formatter.parse(colValue).getTime))
+      new java.sql.Timestamp(formatter.parse(colValue).getTime)
     }
   }
 

@@ -2,6 +2,7 @@ package com.zaiou.cleaning.db;
 
 import com.zaiou.cleaning.config.TaskInitConfig;
 import com.zaiou.cleaning.utils.PropertiesUtil;
+import scala.Serializable;
 
 import java.sql.*;
 
@@ -10,7 +11,7 @@ import java.sql.*;
  * @Description: mysql数据操作
  * @modify zaiou 2019-05-27
  */
-public class MysqlService {
+public class MysqlService implements Serializable {
 
     public static Connection getConnection() {
         Connection dbConn = null;

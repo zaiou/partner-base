@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+#获取当前操作系统
+uname="echo `uname`"
+
 #hdfs目录
 cleaning_prefix="/user/cleaning"
 staging_prefix="${cleaning_prefix}/staging" #ftp拉取数据，存储阶段性数据
@@ -8,7 +11,8 @@ Job_path="${staging_prefix}/JobId"  #记录当前从ftp拉取数据的任务id�
 warehouse_prefix="${cleaning_prefix}/warehouse"
 output_prefix="${cleaning_prefix}/output"
 #本地目录
-partner_home="/data/partner"
+current_path=$(cd `dirname $0`; pwd)
+partner_home="${project_path%%/partner-cleaning*}"
 local_path="$partner_home/partner-cleaning"
 local_prefix="$local_path/data/ftp/tmp" #从ftp拉取数据存储到当前服务器临时目录，存储到hdfs后删除
 
@@ -50,10 +54,10 @@ export PATH=$PATH:$JAVA_HOME/bin
 
 
 #生成日志所在日期目录
-if [ ! -d "$partner_home/logs/$y/$m/$d" ]; then
-    mkdir -p "$partner_home/logs/$y/$m/$d"
+if [ ! -d "$local_path/logs/$y/$m/$d" ]; then
+    mkdir -p "$local_path/logs/$y/$m/$d"
 fi
-log_path=$partner_home/logs/$y/$m/$d
+log_path=$local_path/logs/$y/$m/$d
 
 
 

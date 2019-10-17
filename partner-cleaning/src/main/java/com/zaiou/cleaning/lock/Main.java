@@ -5,6 +5,7 @@ import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  * @modify zaiou 2019-05-21
  */
 public class Main {
+
     public static void main(String[] args) {
         if (args.length < 6) {
             println("[scriptFile],[scriptYear],[scriptMonth],[scriptDay],[scriptHour],[scriptSysName],[scriptBussinessName]");
@@ -40,7 +42,7 @@ public class Main {
         }
 
         // zk客户端cutator连接zookeeper
-        String zookeeperConnectString = "hdp1:2181";
+        String zookeeperConnectString = "hdp1:2181,hdp2:2181";
         //baseSleepTimeMs：初始sleep时间  maxRetries：最大重试次数
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000, 3);
         CuratorFramework client = CuratorFrameworkFactory.newClient(

@@ -41,8 +41,8 @@ class XdContWideJob extends WideJob[XdContWideJobConfig] with Hbase {
   override val OUTPUT: String = s"${Paths.WIDE_LAYER}/xd/ContWideTemp"
 
   override def run(sqlContext: SQLContext, config: XdContWideJobConfig): Unit = {
-    sqlContext.udf.register("longToString",longToString  _)
-    //合同信息
-
+//    sqlContext.udf.register("longToString",longToString  _)
+//    //合同信息
+//
   }
 }

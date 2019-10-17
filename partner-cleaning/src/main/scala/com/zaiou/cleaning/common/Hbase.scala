@@ -10,10 +10,13 @@ import org.apache.hadoop.hbase.{HBaseConfiguration, KeyValue, TableName}
 import org.apache.hadoop.hbase.client.{ConnectionFactory, Get, HTable, Put}
 import org.apache.hadoop.hbase.io.ImmutableBytesWritable
 import org.apache.hadoop.hbase.mapred.TableOutputFormat
-import org.apache.hadoop.hbase.mapreduce.{HFileOutputFormat2, LoadIncrementalHFiles, TableInputFormat}
+import org.apache.hadoop.hbase.mapreduce.HFileOutputFormat2
+import org.apache.hadoop.hbase.tool.LoadIncrementalHFiles
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.mapred.JobConf
 import org.apache.hadoop.mapreduce.Job
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat
+import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StringType, StructField, StructType}
 import org.apache.spark.sql.{DataFrame, Row, SQLContext}
 import org.json
@@ -29,25 +32,25 @@ import scala.collection.mutable.{ArrayBuffer, ListBuffer}
   */
 trait Hbase extends Logging {
 
-  def hbaseToDataFrame(propertiesMap: mutable.Map[String, String], sqlContext: SQLContext, table: String): DataFrame = {
-    val hadoopRDD = sqlContext.sparkContext.newAPIHadoopRDD(HbaseService.getHbaseConf(propertiesMap, table), classOf[TableInputFormat], classOf[org.apache.hadoop.hbase.io.ImmutableBytesWritable], classOf[org.apache.hadoop.hbase.client.Result])
-
-    lazy val hbaseSchema = HbaseService.getHTable(propertiesMap, Inputs.HBASE_SCHEMA)
-    val json = Bytes.toString(hbaseSchema.get(new Get(Bytes.toBytes(table))).getValue(Bytes.toBytes("f"), Bytes.toBytes("schema")))
-    if (StringUtils.isEmpty(json)) {
-      throw new RuntimeException(s"表[${table}]的HBASE_SCHEMA不存在，请解析后在执行此JOB!!!")
-    }
-    println(s"table:${table}  jsonSchema:${json}")
-    val jsonArray = new JSONObject(json).getJSONArray("fields")
-    val schemaList = new ListBuffer[StructField]
-    schemaList += StructField("rowKey", StringType, false)
-    for (i <- 0 until jsonArray.length()) {
-
-    }
-
-    //待续
-    null
-  }
+//  def hbaseToDataFrame(propertiesMap: mutable.Map[String, String], sqlContext: SQLContext, table: String): DataFrame = {
+//    val hadoopRDD = sqlContext.sparkContext.newAPIHadoopRDD(HbaseService.getHbaseConf(propertiesMap, table), classOf[TableInputFormat], classOf[org.apache.hadoop.hbase.io.ImmutableBytesWritable], classOf[org.apache.hadoop.hbase.client.Result])
+//
+//    lazy val hbaseSchema = HbaseService.getHTable(propertiesMap, Inputs.HBASE_SCHEMA)
+//    val json = Bytes.toString(hbaseSchema.get(new Get(Bytes.toBytes(table))).getValue(Bytes.toBytes("f"), Bytes.toBytes("schema")))
+//    if (StringUtils.isEmpty(json)) {
+//      throw new RuntimeException(s"表[${table}]的HBASE_SCHEMA不存在，请解析后在执行此JOB!!!")
+//    }
+//    println(s"table:${table}  jsonSchema:${json}")
+//    val jsonArray = new JSONObject(json).getJSONArray("fields")
+//    val schemaList = new ListBuffer[StructField]
+//    schemaList += StructField("rowKey", StringType, false)
+//    for (i <- 0 until jsonArray.length()) {
+//
+//    }
+//
+//    //待续
+//    null
+//  }
 
   def loadDataFrameToHbase(propertiesMap: mutable.Map[String, String], sqlContxt: SQLContext, rowKeyP: DataFrame, output: String, table: String, pRowKey: String, tableJobConf: JobConf) = {
     val schema = rowKeyP.schema
@@ -55,6 +58,7 @@ trait Hbase extends Logging {
     val dropDuplicates = new ArrayBuffer[String]
 
     dropDuplicates.+=(pRowKey)
+
     if (Inputs.CUST_IDCARD.eq(pRowKey) || Inputs.CUST_NO.equals(pRowKey) || Inputs.CONTRACT_NO.equals(pRowKey)) {
       dropDuplicates.+=(Inputs.BANK_CODE)
       rowKeyRs = rowKeyP.where(s"substring(${Inputs.BANK_CODE},0,2)='34'")
@@ -77,19 +81,23 @@ trait Hbase extends Logging {
     val mapRowKeyRs = dropDuplicatesRowKeyRs.rdd.map(r => {
       packageParseKeyValue(r,columnSort,columnMap,pRowKey)
     })
-
     val filter=mapRowKeyRs.filter(_._1!=null)
+
     val flatMap=filter.sortByKey().flatMap(_._2)
-
+    println("保存数据到hdfs"+s"${output}/hFile/${pathTable}")
     flatMap.saveAsNewAPIHadoopFile(s"${output}/hFile/${pathTable}", classOf[ImmutableBytesWritable], classOf[KeyValue], classOf[HFileOutputFormat2], tableJobConf)
-
     val shell=new FsShell(HBaseConfiguration.create())
     shell.run(Array("-chmod","-R","777",s"${output}/hFile/${pathTable}"))
     shell.close()
 
+    println("=====保存到hdfs-hfile成功!")
+
     doBulkLoad(s"${output}/hFile/${pathTable}", table, tableJobConf)
 
     lazy val hbaseSchema=HbaseService.getHTable(propertiesMap,Inputs.HBASE_SCHEMA)
+
+    println("===hbaseSchema："+hbaseSchema)
+
     val oldJson = Bytes.toString(hbaseSchema.get(new Get(Bytes.toBytes(table))).getValue(Bytes.toBytes("f"), Bytes.toBytes("schema")))
 
     val schemaList=new ListBuffer[StructField]
@@ -106,7 +114,7 @@ trait Hbase extends Logging {
       }
     }
     val p=new Put(Bytes.toBytes(table))
-    p.add(Bytes.toBytes("f"),Bytes.toBytes("schema"),Bytes.toBytes(StructType(schemaList.distinct.toList).json))
+    p.addColumn(Bytes.toBytes("f"),Bytes.toBytes("schema"),Bytes.toBytes(StructType(schemaList.distinct.toList).json))
     hbaseSchema.put(p)
     hbaseSchema.close()
   }
@@ -144,19 +152,23 @@ trait Hbase extends Logging {
 
   }
 
-  def doBulkLoad(path:String,tableName:String,hBaseConf:JobConf): Unit ={
+
+  def doBulkLoad(path: String, tableName: String, hBaseConf: JobConf) = {
+    println("BulkLoad-保存数据到hbase开始")
     val load = new LoadIncrementalHFiles(hBaseConf)
-    val conn=ConnectionFactory.createConnection(hBaseConf)
-    val table=conn.getTable(TableName.valueOf(tableName))
+    val conn = ConnectionFactory.createConnection(hBaseConf)
+    val table = conn.getTable(TableName.valueOf(tableName))
     try {
       val regionLocator = conn.getRegionLocator(TableName.valueOf(tableName))
-      val job=Job.getInstance(hBaseConf)
+      val job = Job.getInstance(hBaseConf)
       job.setJobName(s"doBulkLoad[${tableName}]")
       job.setMapOutputKeyClass(classOf[ImmutableBytesWritable])
       job.setMapOutputValueClass(classOf[KeyValue])
-      HFileOutputFormat2.configureIncrementalLoad(job,table,regionLocator)
-      load.doBulkLoad(new Path(path),table.asInstanceOf[HTable])
+      HFileOutputFormat2.configureIncrementalLoad(job, table, regionLocator)
+      load.doBulkLoad(new Path(path),conn.getAdmin,table.asInstanceOf[HTable],regionLocator)
+//      load.doBulkLoad(new Path(path), table.asInstanceOf[HTable])
     } finally {
+      println("BulkLoad-保存数据到hbase结束")
       table.close()
       conn.close()
     }
@@ -170,8 +182,9 @@ trait Hbase extends Logging {
     val jobConf = new JobConf(HBaseConfiguration.create())
     jobConf.set("hbase.zookeeper.property.clientPort", propertiesMap("spark.zk_port"))
     jobConf.set("hbase.zookeeper.quorum", propertiesMap("spark.zk_ip"))
-    jobConf.set("zookeeper.znode.parent", "/hbase")
+    jobConf.set("zookeeper.znode.parent", "/hbase/master")
     jobConf.setOutputFormat(classOf[TableOutputFormat])
+    jobConf.set("hbase.mapreduce.hfileoutputformat.table.name", tableName)
     jobConf.set(TableOutputFormat.OUTPUT_TABLE, tableName) //ShortListCustNo  ShortListIdCard
     jobConf.setInt("hbase.mapreduce.bulkload.max.hfiles.perRegion.perFamily", 1024)
     jobConf

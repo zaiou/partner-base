@@ -47,7 +47,7 @@ abstract class Job[T] extends Serializable with Logging {
       printLog(s"propertiesMap:${propertiesMap}")
     }
     val sqlContext:SQLContext=new HiveContext(sc)
-    sqlContext.udf.register("md5",MD5.MD51 _)
+//    sqlContext.udf.register("md5",MD5.MD51 _)
     run(sqlContext,config)
 
   }

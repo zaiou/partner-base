@@ -37,7 +37,7 @@ abstract class Parse[T] extends Job[T] with Hbase {
 
   def parseRow(lNo: Long, l: String, idCard: String): Row = {
     val ll = l.replaceAll(" ", "")
-    val listBuffer = new ListBuffer[Option[Any]]
+    val listBuffer = new ListBuffer[Any]
     try {
       if (columnSize.toInt == ll.split(delimiter, -1).length) {
         //正常方式解析数据
@@ -60,7 +60,7 @@ abstract class Parse[T] extends Job[T] with Hbase {
     Row.fromSeq(listBuffer.toSeq)
   }
 
-  def parseRowByCommon(line: String, listBuffer: ListBuffer[Option[Any]], idCard: String): ListBuffer[Option[Any]] = {
+  def parseRowByCommon(line: String, listBuffer: ListBuffer[Any], idCard: String): ListBuffer[Any] = {
     listBuffer.clear()
     var arr = line.split(delimiter, -1)
     for (tuple3 <- mapping) {
@@ -70,10 +70,11 @@ abstract class Parse[T] extends Job[T] with Hbase {
       }
       listBuffer += matchFieldType(colValue, tuple3._3)
     }
+
     listBuffer
   }
 
-  def matchFieldType(colValue: String, colType: String): Option[Any] = colType match {
+  def matchFieldType(colValue: String, colType: String): Any = colType match {
     case "String" => Utils.wrapString(colValue)
     case "Long" => Utils.wrapLong(colValue)
     case "Int" => Utils.wrapInt(colValue)
