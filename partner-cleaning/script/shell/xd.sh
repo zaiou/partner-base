@@ -7,21 +7,14 @@ day=$3
 hour=$4
 sys_name=$5
 business_name=$6
-name="AHXD"
-printlnLog "=====xd.sh======start=====year:$year==month:$month==day:$day==sys_name:$sys_name==name:$name==bussiness_name:$business_name"
+total_sys_name="AHXD"
+printlnLog "=====xd.sh======start=====year:$year==month:$month==day:$day==sys_name:$sys_name==name:$total_sys_name==bussiness_name:$business_name"
 
 #ftp下载工作目录 -- 存储阶段性数据
 hdfs_staging_prefix="$staging_prefix/ftp/xd"
 hadoop fs -test -e $hdfs_staging_prefix
 if [ $? != 0 ]; then
     hadoop fs -mkdir -p $hdfs_staging_prefix
-fi
-
-#ftp下载文件hdfs存储目录 -- 存储最终下载文件
-hdfs_original_prefix="$original_prefix/ftp/xd"
-hadoop fs -test -e $hdfs_original_prefix
-if [ $? != 0 ]; then
-    hadoop fs -mkdir -p $hdfs_original_prefix
 fi
 
 #创建parse文件夹
@@ -37,6 +30,14 @@ if [ $? != 0 ]; then
     hadoop fs -mkdir -p $hdfs_staging_prefix/ok
 fi
 
+
+#ftp下载文件存储到hdfs目录 -- 存储最终下载文件
+hdfs_original_prefix="$original_prefix/ftp/xd"
+hadoop fs -test -e $hdfs_original_prefix
+if [ $? != 0 ]; then
+    hadoop fs -mkdir -p $hdfs_original_prefix
+fi
+
 beginTime=`date +%s`
 
 #xd[信贷系统]
@@ -46,6 +47,7 @@ fileMap["CMUSER"]="Y,USERID,BANKID";
 #借款合同信息表
 fileMap["DBCONTINFO"]="Y,CONTNO"
 
+#当前的下载时间
 downYear=`date +%Y -d "-$yesDay days"`
 downMonth=`date +%m -d "-$yesDay days"`
 downDay=`date +%d -d "-$yesDay days"`
@@ -56,7 +58,7 @@ if [ $business_name = "ftp" ]; then
 
     #执行抓取任务
     for key in ${!fileMap[@]} ; do
-        sh $local_path/script/shell/common/processTable.sh $key $hdfs_staging_prefix $hdfs_original_prefix $downYear $downMonth $downDay $downHour ${fileMap[$key]} "DATA_LOAD_" $sys_name $name
+        sh $local_path/script/shell/common/processTable.sh $key $hdfs_staging_prefix $hdfs_original_prefix $downYear $downMonth $downDay $downHour ${fileMap[$key]} "DATA_LOAD_" $sys_name $total_sys_name
     done
     endTime=`date +%s`
     printlnLog "xd耗时计算>>processTable耗时:"+$[endTime-beginTime]"秒"

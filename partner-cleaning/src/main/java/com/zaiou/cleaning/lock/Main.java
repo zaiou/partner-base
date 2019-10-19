@@ -1,5 +1,8 @@
 package com.zaiou.cleaning.lock;
 
+import com.zaiou.cleaning.utils.PLog;
+import com.zaiou.common.enums.ResultInfo;
+import com.zaiou.common.exception.BussinessException;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -18,15 +21,19 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * @author zaiou 2019-05-21
- * @Description:
+ * @Description:任务入口
  * @modify zaiou 2019-05-21
  */
 public class Main {
 
+    /**
+     * 任务入口
+     * @param args
+     */
     public static void main(String[] args) {
         if (args.length < 6) {
-            println("[scriptFile],[scriptYear],[scriptMonth],[scriptDay],[scriptHour],[scriptSysName],[scriptBussinessName]");
-            System.exit(1);
+            throw new BussinessException(ResultInfo.CLEANING_3000.getCode(), ResultInfo.CLEANING_3000.getMsg());
+//            System.exit(1);
         }
 
         //设置script参数
@@ -49,10 +56,11 @@ public class Main {
                 zookeeperConnectString, retryPolicy);
         client.start();
 
-        println("scriptFile=" + scriptFile + " scriptParam=" + scriptYear + " " + scriptMonth + " " + scriptDay + " " + scriptHour + " " + scriptSysName + " " + scriptBusinessName + " start");
+        PLog.logger.info("scriptFile=" + scriptFile + " scriptParam=" + scriptYear + " " + scriptMonth + " " + scriptDay + " " + scriptHour + " " + scriptSysName + " " + scriptBusinessName + " 当前业务执行start");
         //执行业务脚本
         processShell(client, null, scriptFile, scriptYear, scriptMonth, scriptDay, scriptHour, scriptSysName, scriptBusinessName);
-        println("scriptFile=" + scriptFile + " scriptParama=" + scriptYear + " " + scriptMonth + " " + scriptDay + " " + scriptHour + " " + scriptSysName + " " + scriptBusinessName + " end");
+
+        PLog.logger.info("scriptFile=" + scriptFile + " scriptParama=" + scriptYear + " " + scriptMonth + " " + scriptDay + " " + scriptHour + " " + scriptSysName + " " + scriptBusinessName + " 当前业务执行end");
 
         client.close();
     }
@@ -85,7 +93,7 @@ public class Main {
         //获取锁，设置时长为5秒，获取不到继续获取
         try {
             if (lock.acquire(5, TimeUnit.SECONDS)) {
-                println("-------" + scriptFile + "[" + scriptSysName + "]" + "获得zk锁");
+                PLog.logger.info("-------" + scriptFile + "[" + scriptSysName + "]" + "获得zk锁");
                 //执行服务器命令脚本
                 Process p = Runtime.getRuntime().exec(new String[]{"sh", scriptFile, scriptYear, scriptMonth, scriptDay, scriptHour, scriptSysName, scriptBusinessName});
                 // 在runtime执行大点的命令中，输入流和错误流会不断有流进入存储在JVM的缓冲区中，如果缓冲区的流不被读取被填满时，就会造成runtime的阻塞
@@ -94,25 +102,23 @@ public class Main {
                 new Mythread(p.getErrorStream()).start();
                 //导致当前线程等待，如有必要，一直要等到由该 Process 对象表示的进程已经终止。如果已终止该子进程，此方法立即返回。如果没有终止该子进程，调用的线程将被阻塞，直到退出子进程，根据惯例，0 表示正常终止
                 p.waitFor();
-                println("-------" + scriptFile + "[" + scriptSysName + "]" + "zk锁使用完毕");
+                PLog.logger.info("-------" + scriptFile + "[" + scriptSysName + "]" + "zk锁使用完毕");
             } else {
-                println("----------" + scriptFile + "[" + scriptSysName + "]" + "没有获得zk锁----------");
-
+                PLog.logger.info("----------" + scriptFile + "[" + scriptSysName + "]" + "没有获得zk锁----------");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PLog.logger.error(e.getMessage(),e);
         } finally {
-
             try {
-                println("-----" + scriptFile + "[" + scriptSysName + "]" + " 是否获取锁 " + lock.isAcquiredInThisProcess());
+                PLog.logger.info("-----" + scriptFile + "[" + scriptSysName + "]" + " 是否获取锁: " + lock.isAcquiredInThisProcess());
                 //判断是否持有锁 进而进行锁是否释放的操作
                 if (lock.isAcquiredInThisProcess()) {
                     lock.release();
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                PLog.logger.info(e.getMessage(),e);
             }
-            println("----------" + scriptFile + "[" + scriptSysName + "]" + "释放锁----------");
+            PLog.logger.info("----------" + scriptFile + "[" + scriptSysName + "]" + "释放锁----------");
         }
     }
 
@@ -129,17 +135,11 @@ public class Main {
             String result = null;
             try {
                 while ((result = reader.readLine()) != null) {
-                    println("INFO" + result);
+                    PLog.logger.info("当前任务INFO:" + result);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                PLog.logger.error(e.getMessage(),e);
             }
         }
-    }
-
-    private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
-    private static void println(String s) {
-        System.out.println(sdf.format(new Date()) + ":" + s);
     }
 }

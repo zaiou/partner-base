@@ -1,9 +1,11 @@
 package com.zaiou.common.enums;
 
+import com.zaiou.common.exception.BussinessException;
 import com.zaiou.common.service.CacheService;
 import com.zaiou.common.utils.SpringContextHolder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.io.FileCleaningTracker;
 
 import java.text.MessageFormat;
 
@@ -47,17 +49,29 @@ public enum  ResultInfo {
     WEB_2001	("01","2001", "账号已被注销，请联系管理员"),
 
     /** -----定时任务---- **/
-    TASK_9000					("05", "9000","已经执行[{0}]成功一次,不再重复执行!"),
-    TASK_9001					("05", "9001","依赖的定时任务[{0}]还没有执行完毕"),
+    TASK_9000	("05", "9000","已经执行[{0}]成功一次,不再重复执行!"),
+    TASK_9001	("05", "9001","依赖的定时任务[{0}]还没有执行完毕"),
+
+
+    /**数据清洗**/
+    CLEANING_SYS_ERROR ("03","3333","数据清洗系统异常"),
+    CLEANING_3000 ("03","3000","参数长度错误异常"),
     ;
 
     public String getCode() {
         return system + code;
     }
 
+
+    /**
+     * 格式化Redis或数据库获取的错误码信息提示语
+     * @param params
+     * @return
+     */
     public String getCacheMsg(Object... params) {
         String msg = SpringContextHolder.getBean(CacheService.class).getResultMsg(system, code);
         return MessageFormat.format(msg, params);
+
     }
 
     public static ResultInfo getResultCode(String system, String code) {

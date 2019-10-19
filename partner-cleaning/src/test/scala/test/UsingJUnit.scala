@@ -1,5 +1,10 @@
 package test
 
+import com.typesafe.scalalogging.Logger
+import com.zaiou.cleaning.utils.PLog
+import com.zaiou.common.enums.ResultInfo
+import com.zaiou.common.exception.BussinessException
+import lombok.extern.slf4j.Slf4j
 import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
@@ -8,7 +13,9 @@ import org.apache.hadoop.mapreduce.lib.input.{KeyValueTextInputFormat, TextInput
 import org.apache.spark.sql.hive.HiveContext
 import org.apache.spark.sql.{Row, SQLContext}
 import org.apache.spark.sql.types.{IntegerType, StringType, StructField, StructType}
+import org.junit
 import org.junit.Test
+import org.slf4j.LoggerFactory
 
 import scala.collection.mutable.ListBuffer
 
@@ -18,7 +25,26 @@ import scala.collection.mutable.ListBuffer
   * @modify zaiou 2019-08-18
   */
 @Test
+@Slf4j
 class UsingJUnit extends Serializable{
+
+  @junit.Test
+  def test:Unit={
+
+    throw new BussinessException(ResultInfo.CLEANING_3000.getCode(), ResultInfo.CLEANING_3000.getMsg())
+    System.exit(1)
+
+    val logger = LoggerFactory.getLogger(this.getClass)
+    try {
+      PLog.logger.debug("***")
+      val a = 1 / 0
+      logger.info("This is very convenient ;-)")
+    } catch {
+      case e: Exception=> {
+        logger.error(e.getMessage,e)
+      }
+    }
+  }
 
 //  @Test
   def testList(): Unit = {

@@ -1,7 +1,7 @@
 #!/bin/sh
 source /data/partner/partner-cleaning/script/util/util.sh
 
-t=$1
+key=$1
 hdfs_staging_prefix=$2
 hdfs_original_prefix=$3
 year=$4
@@ -9,25 +9,25 @@ month=$5
 day=$6
 hour=${7}
 db_script=$8
-t_prefix=$9
-name=${10}
-sys_name=${11}
+key_prefix=$9
+sys_name=${10}
+total_sys_name=${11}
 
-printlnLog "=====$t======processTable.sh start==hdfs_staging_prefix:$hdfs_staging_prefix==hdfs_original_prefix:$hdfs_original_prefix==year:$year==month:$month==day:$day==sys_name:$sys_name==name:$name==db_script:$db_script=="
+printlnLog "=====$key======processTable.sh start==hdfs_staging_prefix:$hdfs_staging_prefix==hdfs_original_prefix:$hdfs_original_prefix==year:$year==month:$month==day:$day==total_sys_name:$total_sys_name==sys_name:$sys_name==db_script:$db_script=="
 
 
-ftpFilePath=$ftp_prefix/$sys_name/PUB
+ftpFilePath=$ftp_prefix/$total_sys_name/PUB
 
 #根据表全量还是增量生成对应文件
 if [ ${db_script:0:1} = "Y" -o ${db_script:0:1} = "M" ]; then
-    okFile="ODS."$sys_name"_TMP_"$t"_1208_TXT_"$year$month$day".ok"
+    okFile="ODS."$total_sys_name"_TMP_"$t"_1208_TXT_"$year$month$day".ok"
     printlnLog "增量表OK文件【$okFile】"
-    dataFile="ODS."$sys_name"_TMP_"$t"_1208_TXT.txt"
+    dataFile="ODS."$total_sys_name"_TMP_"$t"_1208_TXT.txt"
     printlnLog "增量dataFile文件【$dataFile】"
 else
-    okFile="ODS."$sys_name"_MIR_"$t"_1208_TXT_"$year$day".ok"
+    okFile="ODS."$total_sys_name"_MIR_"$t"_1208_TXT_"$year$day".ok"
     printlnLog "全量表OK文件【$okFile】"
-    dataFile="ODS."$sys_name"_MIR_"$t"_1208_TXT.txt"
+    dataFile="ODS."$total_sys_name"_MIR_"$t"_1208_TXT.txt"
     printlnLog "全量表dataFile文件【$dataFile】"
 fi
 
@@ -85,7 +85,7 @@ else
         java -Djava.ext.dirs=$local_path/lib/run/ -cp $local_path/partner-cleaning-0.0.1-SNAPSHOT.jar com.zaiou.cleaning.mapper.UpdateSysScheduleLog "$id" "0"
     fi
 fi
-printlnLog "====$t====processTable.sh end============year:$year===$month:$month===day:$day===sys_name:$sys_name=====name:$name==="
+printlnLog "====$t====processTable.sh end============year:$year===$month:$month===day:$day===total_sys_name:$total_sys_name=====sys_name:$sys_name==="
 
 
 

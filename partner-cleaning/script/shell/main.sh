@@ -6,11 +6,7 @@ source "${project_path%%script*}/script/util/util.sh"
 
 year=`date +%Y`
 month=`date +%m`
-if $uname  =  'Darwin'; then
-day=`date -v -1d +%d`
-else
 day=`date +%d -d "-$yesDay days"`
-fi
 hour=`date +%H`
 
 yearSocial=`date +%Y`

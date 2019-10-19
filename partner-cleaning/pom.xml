@@ -96,6 +96,12 @@
             <version>2.0.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.typesafe.scala-logging</groupId>
+            <artifactId>scala-logging_2.11</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.github.scopt</groupId>
