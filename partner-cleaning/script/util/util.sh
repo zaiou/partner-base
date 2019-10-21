@@ -7,7 +7,7 @@ uname="echo `uname`"
 cleaning_prefix="/user/cleaning"
 staging_prefix="${cleaning_prefix}/staging" #ftp拉取数据，存储阶段性数据
 original_prefix="${cleaning_prefix}/original"   #从ftp拉取数据在hdfs存放位置
-Job_path="${staging_prefix}/JobId"  #记录当前从ftp拉取数据的任务id，标识当前任务是否成功
+job_path="${staging_prefix}/jobid"  #记录当前从ftp拉取数据的任务id，标识当前任务是否成功
 warehouse_prefix="${cleaning_prefix}/warehouse"
 output_prefix="${cleaning_prefix}/output"
 #本地目录

@@ -1,6 +1,7 @@
 package com.zaiou.cleaning.mapper;
 
 import com.zaiou.cleaning.db.MysqlService;
+import com.zaiou.cleaning.utils.PLog;
 import com.zaiou.cleaning.utils.PropertiesUtil;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
@@ -30,8 +31,9 @@ public class InsertSysScheduleLog {
         System.out.println("当前任务id："+id);
         //在hdfs中创建一个id文件
         Configuration conf=new Configuration();
-        String path= PropertiesUtil.propertiesMap.get("spark.hdfs_path")+"/user/cleaning/staging"+"/JobId/"+appname+"/"+id;
+        String path= PropertiesUtil.propertiesMap.get("spark.hdfs_path")+"/user/cleaning/staging"+"/jobid/"+appname+"/"+id;
         try {
+            PLog.logger.info("向hdfs中插入状态下载中【appname】:"+appname +"jobid="+id);
             FileSystem fs=FileSystem.get(URI.create(path),conf);
             FSDataOutputStream fsDataOutputStream=fs.create(new Path(path));
             fsDataOutputStream.close();
