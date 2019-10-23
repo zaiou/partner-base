@@ -84,23 +84,19 @@ importDataToMysqlByOriginal(){
         localDir=`pwd`
         filelist=`ls $localDir`
         for file in $filelist ; do
-            printlnLog $file
-
-            #待定---待修改
 
             printlnLog "importDataToMysqlByOriginal $file start"
             $mysqlPrefix/mysql -h$mysqIp -u$mysqlUser -p$mysqlPass   <<EOF
                 USE PARTNER;
                 LOAD DATA LOCAL INFILE "$local_path/data/$table/$year$month$day/$file"
-                INTO TABLE  $table
+                REPLACE INTO TABLE  $table
                 FIELDS TERMINATED BY "$delimiter"
                 ($script);
 EOF
-#            exit
             printlnLog "importDataToMysqlByOriginal $file end"
             rm -rf $local_path/data/$table/$year$month$day/$file
         done
     else
-        echo "$hdfs 文件不存在"
+        echo "$hdfs 文件不存在,无法更新数据到mysql"
     fi
 }

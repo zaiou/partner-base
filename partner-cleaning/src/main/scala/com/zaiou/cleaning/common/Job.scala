@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 import com.zaiou.cleaning.db.MysqlService
-import com.zaiou.cleaning.utils.MD5
+import com.zaiou.cleaning.utils.{MD5, PLog}
 import com.zaiou.common.utils.{DateUtils, MD5Utils}
 import org.apache.spark.{SparkConf, SparkContext}
 import org.apache.spark.sql.SQLContext
@@ -30,7 +30,7 @@ abstract class Job[T] extends Serializable with Logging {
 
   def execute(config: T): Unit={
     val id=mysqlService.insertSysScheduleLog(s"cleaning${appName}")
-    printLog(s"SysScheduleLog->id:${id}")
+    PLog.logger.info(s"SysScheduleLog->id:${id}")
 
     System.setProperty("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
     val conf=new SparkConf().setAppName(appName)
@@ -44,7 +44,7 @@ abstract class Job[T] extends Serializable with Logging {
       propertiesMap.+=(t._1->t._2)
     })
     if (!"online".equals(propertiesMap.get("spark.model").get)) {
-      printLog(s"propertiesMap:${propertiesMap}")
+      PLog.logger.info(s"propertiesMap:${propertiesMap}")
     }
     val sqlContext:SQLContext=new HiveContext(sc)
 //    sqlContext.udf.register("md5",MD5.MD51 _)
@@ -52,13 +52,13 @@ abstract class Job[T] extends Serializable with Logging {
 
   }
 
-  def printLog(info:String):Unit={
-    println(longToString(System.currentTimeMillis(),DateUtils.format2)+"["+Thread.currentThread().getId+"]"+info)
-  }
-
-  def longToString(t:Long, format: String): String ={
-    val sdf=new SimpleDateFormat(format)
-    val d=new Date(t)
-    sdf.format(d)
-  }
+//  def printLog(info:String):Unit={
+//    println(longToString(System.currentTimeMillis(),DateUtils.format2)+"["+Thread.currentThread().getId+"]"+info)
+//  }
+//
+//  def longToString(t:Long, format: String): String ={
+//    val sdf=new SimpleDateFormat(format)
+//    val d=new Date(t)
+//    sdf.format(d)
+//  }
 }

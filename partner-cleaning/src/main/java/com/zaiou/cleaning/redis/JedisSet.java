@@ -1,5 +1,8 @@
 package com.zaiou.cleaning.redis;
 
+import com.zaiou.common.enums.ResultInfo;
+import com.zaiou.common.exception.BussinessException;
+
 /**
  * @author zaiou 2019-06-05
  * @Description: jedis设置
@@ -7,10 +10,8 @@ package com.zaiou.cleaning.redis;
  */
 public class JedisSet {
     public static void main(String[] args) {
-        System.out.println("c参数数量："+args.length);
         if (args.length!=3){
-            System.err.println("use:<key> <value> <seconds>");
-            System.exit(0);
+            throw new BussinessException(ResultInfo.CLEANING_3000.getCode(), ResultInfo.CLEANING_3000.getMsg());
         }
         String key=args[0];
         String value=args[1];

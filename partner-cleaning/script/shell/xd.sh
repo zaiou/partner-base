@@ -63,12 +63,13 @@ if [ $business_name = "ftp" ]; then
     endTime=`date +%s`
     printlnLog "xd耗时计算>>processTable耗时:"+$[endTime-beginTime]"秒"
 
+    #判断文件是否下载完成
     okCount=`hadoop fs -count $hdfs_staging_prefix/ok/$downYear$downMonth$downDay/ | awk -F " " '{print $2}' `
     printlnLog "系统表文件数量:"${#fileMap[@]}" 下载文件数量:"$okCount
     if [ "$okCount" != "${#fileMap[@]}" ]; then
         printlnLog "OK文件个数不一致, 【$downYear$downMonth$downDay】文件未下载完毕"
     else
-        printlnLog "OK文件个数一直, 【$downYear$downMonth$downDay】文件下载完毕"
+        printlnLog "OK文件个数一致, 【$downYear$downMonth$downDay】文件下载完毕"
     fi
 fi
 
@@ -85,7 +86,6 @@ if [ $business_name = "parse" ]; then
     #判断时间是否为空
     if [ $parseDate ]; then
         printlnLog "解析日期不为空==parse==$parseDate"
-        okCount=`hadoop fs -count $hdfs_staging_prefix/ok/$parseDate/ | awk -F " " '{print $2}'`
         if [ $okCount = "${#fileMap[@]}" ]; then
             printlnLog "系统表文件数量："${fileMap[@]}" 下载完成文件数量：$okCount OK文件个数一致，【$parseDate】文件下载完成，执行解析任务!"
             #获取解析时间

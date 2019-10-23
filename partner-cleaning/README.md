@@ -73,4 +73,6 @@ https://blog.csdn.net/Hiwes/article/details/80228590
     参考：https://blog.csdn.net/adorechen/article/details/78942536
 
 ftp文件为gz压缩文件怎么处理
+问题1：ftp一天可以更新多次吗
+问题2：解析的数据今天解析过了，会重复解析入库吗
 

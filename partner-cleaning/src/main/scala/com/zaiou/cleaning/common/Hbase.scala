@@ -90,7 +90,7 @@ trait Hbase extends Logging {
     shell.run(Array("-chmod","-R","777",s"${output}/hFile/${pathTable}"))
     shell.close()
 
-    println("=====保存到hdfs-hfile成功!")
+    println("=====保存到hdfs：hfile成功!")
 
     doBulkLoad(s"${output}/hFile/${pathTable}", table, tableJobConf)
 

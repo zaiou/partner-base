@@ -36,7 +36,6 @@ if [ $? = 0 ]; then
         --properties-file $local_path/config/cleaning.properties \
         --jars $local_path/lib/run/scopt_2.10-3.2.0.jar,$local_path/lib/run/mysql-connector-java-5.1.47.jar \
         --class com.zaiou.cleaning.job.parse.xd.DbContInfoParseJob $local_path/partner-cleaning-0.0.1-SNAPSHOT.jar --year $year --month $month --day $day >> $log_path/startDbContInfoParseJob.log
-    printlnLog "DbContOnfoParseJob"
 else
     printlnLog "ODS.AHXD_TMP_DBCONTINFO_1208_TXT.txt【$year/$month/$day/】文件不存在"
 fi

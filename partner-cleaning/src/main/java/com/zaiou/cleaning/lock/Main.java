@@ -84,7 +84,7 @@ public class Main {
                                      String scriptFile, String scriptYear, String scriptMonth,
                                      String scriptDay, String scriptHour, String scriptSysName,
                                      String scriptBusinessName) {
-        String lockPath = "/locker" + scriptSysName;
+        String lockPath = "/locker:" + scriptSysName;
         if (!"".equals(scriptBusinessName)) {
             lockPath = lockPath + "/" + scriptBusinessName;
         }

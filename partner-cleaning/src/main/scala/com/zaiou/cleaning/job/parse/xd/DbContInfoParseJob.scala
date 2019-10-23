@@ -2,6 +2,8 @@ package com.zaiou.cleaning.job.parse.xd
 
 import com.zaiou.cleaning.common.Inputs
 import com.zaiou.cleaning.job.parse.ParseConfig
+import com.zaiou.cleaning.utils
+import com.zaiou.cleaning.utils.PLog
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.io.{LongWritable, Text}
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat
@@ -51,11 +53,11 @@ class DbContInfoParseJob[T] extends XdParse[ParseConfig]{
     hadoopConf.set("column.size", columnSize)
     hadoopConf.set("column.delimiter", delimiter)
 
-    printLog("-----获取hdfs文件"+file)
+    PLog.logger.info("-----获取hdfs文件"+file)
 
     val tableFile = sc.newAPIHadoopFile(file, classOf[TextInputFormat], classOf[LongWritable], classOf[Text], hadoopConf)
       .map(pair => (pair._1, new String(pair._2.getBytes, 0, pair._2.getLength, charseName)))
-    printLog("DBCONTINFO:" + tableFile.count())
+    PLog.logger.info(("DBCONTINFO:" + tableFile.count())
 
     val parseRows = tableFile.map(p => parseRow(p._1.get(), p._2, "")).cache()
 
@@ -65,11 +67,11 @@ class DbContInfoParseJob[T] extends XdParse[ParseConfig]{
 
     val rowRdd=parseRows.filter(_.length==mapping.size)
 
-    printLog("准备向hbase保存【借款合同信息表(DBCONTINFO)】数据 开始")
+    PLog.logger.info("准备向hbase保存【借款合同信息表(DBCONTINFO)】数据 开始")
 
     saveHbase(sqlContext,rowRdd)
 
-    printLog("准备向hbase保存【借款合同信息表(DBCONTINFO)】数据 结束")
+    PLog.logger.info("准备向hbase保存【借款合同信息表(DBCONTINFO)】数据 结束")
   }
 
   def saveHbase (sqlContext: SQLContext,rowRdd:RDD[Row]): Unit ={
