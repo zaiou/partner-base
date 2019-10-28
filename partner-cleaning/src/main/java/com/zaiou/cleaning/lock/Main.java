@@ -135,6 +135,7 @@ public class Main {
             String result = null;
             try {
                 while ((result = reader.readLine()) != null) {
+                    //会打印sh脚本中的输出
                     PLog.logger.info("当前任务INFO:" + result);
                 }
             } catch (IOException e) {

@@ -86,6 +86,7 @@ if [ $business_name = "parse" ]; then
     #判断时间是否为空
     if [ $parseDate ]; then
         printlnLog "解析日期不为空==parse==$parseDate"
+        okCount=`hadoop fs -count $hdfs_staging_prefix/ok/$parseDate/ | awk -F " " '{print $2}'`
         if [ $okCount = "${#fileMap[@]}" ]; then
             printlnLog "系统表文件数量："${fileMap[@]}" 下载完成文件数量：$okCount OK文件个数一致，【$parseDate】文件下载完成，执行解析任务!"
             #获取解析时间
@@ -119,8 +120,11 @@ if [ $business_name = "parse" ]; then
 #                    --class com.zaiou.cleaning.job.wide.XdContWideJob $local_path/partner-cleaning-0.0.1-SNAPSHOT.jar --year $parseYear --month $parseMonth --day $parseDay >> $log_path/startXdContWideHJob.log
 #
 #            fi
-
+        else
+           printlnLog "系统表文件数量:"${#fileMap[@]}" 下载完成文件数量:$okCount OK文件个数不一致，【$parseDate】文件未下载完毕,不执行解析任务！"
         fi
+    else
+       printlnLog "解析日期为空==parseDate==$parseDate"
     fi
 fi
 

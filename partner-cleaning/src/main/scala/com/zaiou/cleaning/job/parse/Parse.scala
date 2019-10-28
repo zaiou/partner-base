@@ -4,6 +4,7 @@ import java.net.URI
 
 import com.zaiou.cleaning.common.{Hbase, Job, Utils}
 import com.zaiou.cleaning.input.MyLineRecordReader
+import com.zaiou.cleaning.utils.PLog
 import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.types.{DoubleType, IntegerType, LongType, StringType, StructField, StructType, TimestampType}
@@ -85,9 +86,9 @@ abstract class Parse[T] extends Job[T] with Hbase {
 
   def errorRow(sqlContex:SQLContext,parseRows:RDD[Row],errorPath:String)={
     val error=parseRows.filter(_.length!=mapping.size)
-    printLog(s"errorRow:${error.count()}")
+    PLog.logger.info(s"errorRow:${error.count()}")
     val deleteRs=FileSystem.get(new URI(errorPath),sqlContex.sparkContext.hadoopConfiguration).delete(new Path(s"{errorPath}"),true)
-    printLog(s"${errorPath} deleteRs:${deleteRs}")
+    PLog.logger.info(s"${errorPath} deleteRs:${deleteRs}")
     error.saveAsTextFile(errorPath)
   }
 

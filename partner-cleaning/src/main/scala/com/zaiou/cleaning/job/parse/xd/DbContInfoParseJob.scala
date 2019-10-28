@@ -57,7 +57,7 @@ class DbContInfoParseJob[T] extends XdParse[ParseConfig]{
 
     val tableFile = sc.newAPIHadoopFile(file, classOf[TextInputFormat], classOf[LongWritable], classOf[Text], hadoopConf)
       .map(pair => (pair._1, new String(pair._2.getBytes, 0, pair._2.getLength, charseName)))
-    PLog.logger.info(("DBCONTINFO:" + tableFile.count())
+    PLog.logger.info("DBCONTINFO:" + tableFile.count())
 
     val parseRows = tableFile.map(p => parseRow(p._1.get(), p._2, "")).cache()
 
