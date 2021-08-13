@@ -46,7 +46,7 @@
         <validation.api.version>2.0.1.Final</validation.api.version>
         <quartz.version>2.3.0</quartz.version>
         <quartz.jobs.version>2.3.0</quartz.jobs.version>
-        <bcprov.jdk15on.version>1.59</bcprov.jdk15on.version>
+        <bcprov.jdk15on.version>1.67</bcprov.jdk15on.version>
         <jasypt.spring.boot.starter.version>1.18</jasypt.spring.boot.starter.version>
     </properties>
 
