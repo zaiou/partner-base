@@ -21,7 +21,7 @@
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
         <java.version>1.8</java.version>
 
-        <spring.boot.version>1.5.12.RELEASE</spring.boot.version>
+        <spring.boot.version>2.5.12</spring.boot.version>
         <spring.boot.redis.session.version>1.3.3.RELEASE</spring.boot.redis.session.version>
         <spring.session.version>1.3.1.RELEASE</spring.session.version>
         <redisson.version>3.7.5</redisson.version>
